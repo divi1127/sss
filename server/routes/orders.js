@@ -3,6 +3,7 @@ const { pool } = require('../config/db');
 const authMiddleware = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const customerAuth = require('./customerAuth');
+const { transformItem, transformArray } = require('../utils/url');
 
 const router = express.Router();
 
@@ -73,7 +74,7 @@ router.get('/', authMiddleware, async (req, res) => {
       JOIN customers c ON o.customer_id = c.id
       ORDER BY o.created_at DESC
     `);
-    res.json(rows);
+    res.json(transformArray(rows));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -97,7 +98,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
       WHERE oi.order_id = ?
     `, [req.params.id]);
 
-    res.json({ ...orders[0], items });
+    res.json(transformItem({ ...orders[0], items }));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -127,7 +128,7 @@ router.get('/my', customerAuth.authMiddleware, async (req, res) => {
       WHERE o.user_id = ?
       ORDER BY o.created_at DESC
     `, [req.user.id]);
-    res.json(rows);
+    res.json(transformArray(rows));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

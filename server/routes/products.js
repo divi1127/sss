@@ -2,6 +2,7 @@ const express = require('express');
 const { pool } = require('../config/db');
 const authMiddleware = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { transformItem, transformArray } = require('../utils/url');
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get('/', async (req, res) => {
     else query += ' ORDER BY created_at DESC';
 
     const [rows] = await pool.query(query, params);
-    res.json(rows);
+    res.json(transformArray(rows));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -48,7 +49,7 @@ router.get('/:id', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM products WHERE id = ?', [req.params.id]);
     if (rows.length === 0) return res.status(404).json({ error: 'Product not found' });
-    res.json(rows[0]);
+    res.json(transformItem(rows[0]));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -63,7 +64,7 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
       'INSERT INTO products (name, description, price, size, stock, image_url) VALUES (?, ?, ?, ?, ?, ?)',
       [name, description, price, size, stock, imageUrl]
     );
-    res.status(201).json({ id: result.insertId, name, description, price, size, stock, image_url: imageUrl });
+    res.status(201).json(transformItem({ id: result.insertId, name, description, price, size, stock, image_url: imageUrl }));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
