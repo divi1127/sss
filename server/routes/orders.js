@@ -64,6 +64,13 @@ router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
       [orderId]
     );
 
+    if (source === 'online_payment') {
+      await pool.query(
+        'INSERT INTO payments (order_id, amount, method, status, screenshot_url) VALUES (?, ?, ?, ?, ?)',
+        [orderId, totalAmount, 'upi', 'pending', screenshotUrl]
+      );
+    }
+
     if (customerEmail) {
       sendOrderConfirmation(transformItem(orderRows[0]), itemRows, customerEmail);
     }
@@ -211,6 +218,16 @@ router.get('/stats/summary', authMiddleware, async (req, res) => {
     const [revenue] = await pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status IN ('Confirmed','Out for Delivery','Delivered')");
     const [confirmed] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Confirmed'");
     const [delivered] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Delivered'");
+    const [todayOrders] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = CURDATE()");
+    const [weekRevenue] = await pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) AND status IN ('Confirmed','Out for Delivery','Delivered')");
+    const [sourceBreakdown] = await pool.query('SELECT order_source, COUNT(*) as count FROM orders GROUP BY order_source');
+    const [paymentMethodStats] = await pool.query("SELECT method, COUNT(*) as count FROM payments GROUP BY method");
+    const [recentOrders] = await pool.query(`
+      SELECT o.id, o.total_amount, o.status, o.order_source, o.created_at,
+             c.name as customer_name
+      FROM orders o JOIN customers c ON o.customer_id = c.id
+      ORDER BY o.created_at DESC LIMIT 5
+    `);
 
     res.json({
       totalOrders: totalOrders[0].count,
@@ -218,6 +235,11 @@ router.get('/stats/summary', authMiddleware, async (req, res) => {
       revenue: revenue[0].total,
       confirmed: confirmed[0].count,
       delivered: delivered[0].count,
+      todayOrders: todayOrders[0].count,
+      weekRevenue: weekRevenue[0].total,
+      sourceBreakdown,
+      paymentMethodStats,
+      recentOrders,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

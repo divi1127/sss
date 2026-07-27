@@ -15,11 +15,17 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import MyOrders from './pages/MyOrders';
 import TrackOrder from './pages/TrackOrder';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import AdminLogin from './admin/AdminLogin';
+import AdminForgotPassword from './admin/AdminForgotPassword';
+import AdminResetPassword from './admin/AdminResetPassword';
 import AdminLayout from './admin/AdminLayout';
 import AdminDashboard from './admin/AdminDashboard';
 import AdminProducts from './admin/AdminProducts';
 import AdminOrders from './admin/AdminOrders';
+import AdminPayments from './admin/AdminPayments';
+import AdminCustomers from './admin/AdminCustomers';
 import AdminRoute from './components/AdminRoute';
 
 function CustomerLayout({ children }) {
@@ -51,12 +57,18 @@ export default function App() {
               <Route path="/my-orders" element={<CustomerLayout><MyOrders /></CustomerLayout>} />
               <Route path="/track-order" element={<CustomerLayout><TrackOrder /></CustomerLayout>} />
               <Route path="/track-order/:id" element={<CustomerLayout><TrackOrder /></CustomerLayout>} />
+              <Route path="/forgot-password" element={<CustomerLayout><ForgotPassword /></CustomerLayout>} />
+              <Route path="/reset-password/:token" element={<CustomerLayout><ResetPassword /></CustomerLayout>} />
               <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+              <Route path="/admin/reset-password/:token" element={<AdminResetPassword />} />
               <Route element={<AdminRoute />}>
                 <Route element={<AdminLayout />}>
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
                   <Route path="/admin/products" element={<AdminProducts />} />
                   <Route path="/admin/orders" element={<AdminOrders />} />
+                  <Route path="/admin/payments" element={<AdminPayments />} />
+                  <Route path="/admin/customers" element={<AdminCustomers />} />
                 </Route>
               </Route>
             </Routes>

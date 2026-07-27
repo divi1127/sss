@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, LogOut, Shield, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, LogOut, Shield, Menu, X, IndianRupee, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminLayout() {
@@ -43,6 +43,12 @@ export default function AdminLayout() {
           </NavLink>
           <NavLink to="/admin/orders" className={linkClass} onClick={() => setSidebarOpen(false)}>
             <ShoppingCart className="w-5 h-5" /> Orders
+          </NavLink>
+          <NavLink to="/admin/payments" className={linkClass} onClick={() => setSidebarOpen(false)}>
+            <IndianRupee className="w-5 h-5" /> Payments
+          </NavLink>
+          <NavLink to="/admin/customers" className={linkClass} onClick={() => setSidebarOpen(false)}>
+            <Users className="w-5 h-5" /> Customers
           </NavLink>
         </nav>
         <div className="p-4 border-t border-gray-800">

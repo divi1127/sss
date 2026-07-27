@@ -58,6 +58,7 @@ async function initDB() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  try { await conn.query('ALTER TABLE customers ADD COLUMN email VARCHAR(255)'); } catch (e) {}  try { await conn.query("ALTER TABLE orders MODIFY COLUMN order_source ENUM('online_payment','whatsapp','instagram') DEFAULT 'online_payment'"); } catch (e) {}
 
   await conn.query(`
     CREATE TABLE IF NOT EXISTS orders (
@@ -83,6 +84,36 @@ async function initDB() {
       price DECIMAL(10, 2) NOT NULL,
       FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
       FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+    )
+  `);
+
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS password_resets (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      email VARCHAR(255) NOT NULL,
+      token VARCHAR(255) NOT NULL,
+      type ENUM('admin', 'customer') NOT NULL,
+      used TINYINT(1) DEFAULT 0,
+      expires_at TIMESTAMP NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS payments (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      order_id INT NOT NULL,
+      amount DECIMAL(10, 2) NOT NULL,
+      method VARCHAR(50) DEFAULT 'upi',
+      transaction_id VARCHAR(255),
+      status VARCHAR(50) DEFAULT 'pending',
+      screenshot_url VARCHAR(500),
+      verified_by INT,
+      verified_at TIMESTAMP NULL,
+      notes TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+      FOREIGN KEY (verified_by) REFERENCES admins(id) ON DELETE SET NULL
     )
   `);
 

@@ -113,4 +113,35 @@ async function sendStatusUpdate(order, customerEmail) {
   }
 }
 
-module.exports = { sendOrderConfirmation, sendStatusUpdate };
+async function sendPasswordResetEmail(email, resetUrl) {
+  const html = `
+    <div style="max-width:600px;margin:0 auto;font-family:Segoe UI,sans-serif">
+      <div style="background:#16a34a;color:white;padding:30px;text-align:center;border-radius:12px 12px 0 0">
+        <h1 style="margin:0;font-size:24px">Password Reset</h1>
+      </div>
+      <div style="background:#f9fafb;padding:30px;border-radius:0 0 12px 12px">
+        <p style="color:#374151;font-size:16px">You requested a password reset. Click the button below to set a new password.</p>
+        <div style="text-align:center;margin:24px 0">
+          <a href="${resetUrl}" style="display:inline-block;background:#16a34a;color:white;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:16px">Reset Password</a>
+        </div>
+        <p style="color:#6b7280;font-size:13px;text-align:center">This link expires in 1 hour.</p>
+        <p style="color:#6b7280;font-size:13px;text-align:center">If you didn't request this, ignore this email.</p>
+        <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0">
+        <p style="color:#9ca3af;font-size:12px;text-align:center">S CUBE - Premium Home Care</p>
+      </div>
+    </div>`;
+
+  try {
+    await getTransporter().sendMail({
+      from: `"S CUBE" <${process.env.SMTP_USER || 'noreply@scube.in'}>`,
+      to: email,
+      subject: 'Password Reset | S CUBE',
+      html,
+    });
+    console.log('Password reset email sent to', email);
+  } catch (err) {
+    console.error('Failed to send password reset email:', err.message);
+  }
+}
+
+module.exports = { sendOrderConfirmation, sendStatusUpdate, sendPasswordResetEmail };

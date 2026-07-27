@@ -1,34 +1,71 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Sparkles, Droplets, Leaf, Star, Shield, Check, ChevronRight, Package, Award, Heart, Users, Building2, Utensils, Coffee, Briefcase, Phone, MessageCircle, Mail, HeadphonesIcon } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { Sparkles, Droplets, Leaf, Star, Shield, Check, ChevronRight, Package, Award, Heart, Users, Building2, Utensils, Coffee, Briefcase, Phone, MessageCircle, Mail, HeadphonesIcon, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import api from '../api/axios';
 import ProductCard from '../components/ProductCard';
 
+const slides = [
+  {
+    tagline: 'Powerful Cleaning. Brilliant Shine. Trusted Every Day.',
+    heading: <>S CUBE <span className="text-highlight-300">Dishwash</span> Liquid</>,
+    description: 'Experience the perfect combination of powerful cleaning and everyday care with S CUBE Dishwash Liquid. Specially formulated to remove stubborn grease, oil, and food residue, S CUBE helps keep your utensils sparkling clean with every wash.',
+    description2: 'Designed for modern kitchens and suitable for everyday household use, it is also suitable for cleaning traditional brass and copper pooja vessels when used as directed.',
+    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1600',
+  },
+  {
+    tagline: 'Rich Foam. Fresh Fragrance. Everyday Care.',
+    heading: <>Cleaning <span className="text-highlight-300">Beyond</span> Ordinary</>,
+    description: 'Every Indian kitchen is unique. S CUBE is developed keeping everyday cleaning needs in mind, offering powerful grease removal together with suitability for a wide range of household utensils.',
+    description2: 'From stainless steel cookware to traditional brass and copper pooja items, S CUBE delivers effective cleaning, rich foam, and a fresh fragrance that makes dishwashing easier and more enjoyable.',
+    image: 'https://images.unsplash.com/photo-1583947215259-38e31af8751f?w=1600',
+  },
+  {
+    tagline: 'Trusted by Families Across India.',
+    heading: <>One Product. <span className="text-highlight-300">Many</span> Uses.</>,
+    description: 'S CUBE Dishwash Liquid is suitable for cleaning stainless steel, brass, copper, aluminium, glassware, and more. A concentrated formula that goes a long way, providing excellent value for every household.',
+    description2: 'Quality checked, manufactured under hygienic conditions, and designed to make your kitchen cleaning quicker, easier, and more efficient.',
+    image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1600',
+  },
+];
+
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = useCallback(() => setCurrentSlide(s => (s + 1) % slides.length), []);
+  const prevSlide = useCallback(() => setCurrentSlide(s => (s - 1 + slides.length) % slides.length), []);
 
   useEffect(() => {
     api.get('/products').then(res => setProducts(res.data.slice(0, 4))).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, [nextSlide]);
+
   return (
     <div>
       <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1600)' }}></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-green-900/85 via-green-800/70 to-green-900/80"></div>
+        {slides.map((slide, i) => (
+          <div key={i} className={`absolute inset-0 transition-all duration-700 ease-in-out ${i === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}>
+            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slide.image})` }} />
+            <div className="absolute inset-0 bg-gradient-to-br from-green-900/85 via-green-800/70 to-green-900/80" />
+          </div>
+        ))}
         <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="max-w-3xl animate-fade-in-up">
-            <span className="inline-block bg-highlight-500/20 text-highlight-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-highlight-400/30">Powerful Cleaning. Brilliant Shine. Trusted Every Day.</span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              S CUBE <span className="text-highlight-300">Dishwash</span> Liquid
+          <div className="max-w-3xl transition-all duration-500" key={currentSlide}>
+            <span className="inline-block bg-highlight-500/20 text-highlight-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-highlight-400/30 animate-fade-in-up">{slides[currentSlide].tagline}</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              {slides[currentSlide].heading}
             </h1>
-            <p className="text-lg sm:text-xl text-brand-100 mb-8 max-w-2xl leading-relaxed">
-              Experience the perfect combination of powerful cleaning and everyday care with S CUBE Dishwash Liquid. Specially formulated to remove stubborn grease, oil, and food residue, S CUBE helps keep your utensils sparkling clean with every wash. Designed for modern kitchens and suitable for everyday household use, it is also suitable for cleaning traditional brass and copper pooja vessels when used as directed.
+            <p className="text-lg sm:text-xl text-brand-100 mb-4 max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              {slides[currentSlide].description}
             </p>
-            <p className="text-base text-brand-200 mb-8 max-w-2xl">
-              Whether you're washing everyday cookware, delicate glassware, or cherished pooja items, S CUBE delivers effective cleaning, rich foam, and a fresh fragrance that makes dishwashing easier and more enjoyable.
+            <p className="text-base text-brand-200 mb-8 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+              {slides[currentSlide].description2}
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <Link to="/products" className="inline-flex items-center bg-highlight-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-highlight-600 transition-all shadow-xl hover:shadow-2xl border border-highlight-400">
                 Buy Now <ChevronRight className="w-5 h-5 ml-1" />
               </Link>
@@ -40,6 +77,19 @@ export default function Home() {
               </Link>
             </div>
           </div>
+        </div>
+
+        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all z-10 hidden sm:block">
+          <ChevronLeftIcon className="w-6 h-6 text-white" />
+        </button>
+        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all z-10 hidden sm:block">
+          <ChevronRightIcon className="w-6 h-6 text-white" />
+        </button>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => setCurrentSlide(i)} className={`w-3 h-3 rounded-full transition-all ${i === currentSlide ? 'bg-highlight-500 w-8' : 'bg-white/50 hover:bg-white/70'}`} />
+          ))}
         </div>
       </section>
 
