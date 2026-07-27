@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useCallback } from 'react';
-import { Sparkles, Droplets, Leaf, Star, Shield, Check, ChevronRight, Package, Award, Heart, Users, Building2, Utensils, Coffee, Briefcase, Phone, MessageCircle, Mail, HeadphonesIcon, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
+import { Sparkles, Droplets, Leaf, Star, Shield, Check, ChevronRight, Package, Award, Heart, Users, Building2, Utensils, Coffee, Briefcase, Phone, MessageCircle, Mail, HeadphonesIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import api from '../api/axios';
 import ProductCard from '../components/ProductCard';
 
