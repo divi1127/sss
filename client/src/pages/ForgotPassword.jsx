@@ -7,6 +7,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [resetUrl, setResetUrl] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -14,7 +15,8 @@ export default function ForgotPassword() {
     setLoading(true);
     setError('');
     try {
-      await api.post('/customer/forgot-password', { email });
+      const res = await api.post('/customer/forgot-password', { email });
+      setResetUrl(res.data.resetUrl || '');
       setSent(true);
     } catch (err) {
       setError(err.response?.data?.error || 'Something went wrong');
@@ -37,11 +39,17 @@ export default function ForgotPassword() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">Check Your Email</h2>
-            <p className="text-gray-500 text-sm mb-6">
-              If an account exists with <strong>{email}</strong>, you'll receive a password reset link shortly.
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">Reset Link Sent</h2>
+            <p className="text-gray-500 text-sm mb-4">
+              If an account exists with <strong>{email}</strong>, you'll receive a password reset link.
             </p>
-            <p className="text-gray-400 text-xs mb-4">In dev mode, the reset link is shown in the server console.</p>
+            {resetUrl && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4 text-left">
+                <p className="text-yellow-800 text-xs font-semibold mb-1">⚠ Dev Mode — Direct Link</p>
+                <a href={resetUrl} className="text-accent-600 text-sm font-medium break-all hover:underline">{resetUrl}</a>
+                <p className="text-yellow-700 text-xs mt-1">Configure SMTP in .env for email delivery.</p>
+              </div>
+            )}
             <Link to="/login" className="text-accent-600 hover:underline font-medium text-sm">Back to Login</Link>
           </div>
         ) : (

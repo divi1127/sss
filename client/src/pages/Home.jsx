@@ -10,21 +10,21 @@ const slides = [
     heading: <>S CUBE <span className="text-highlight-300">Dishwash</span> Liquid</>,
     description: 'Experience the perfect combination of powerful cleaning and everyday care with S CUBE Dishwash Liquid. Specially formulated to remove stubborn grease, oil, and food residue, S CUBE helps keep your utensils sparkling clean with every wash.',
     description2: 'Designed for modern kitchens and suitable for everyday household use, it is also suitable for cleaning traditional brass and copper pooja vessels when used as directed.',
-    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1600',
+    image: 'https://i.pinimg.com/736x/4c/39/38/4c3938ab72b93022b7c83e506a3384e1.jpg',
   },
   {
     tagline: 'Rich Foam. Fresh Fragrance. Everyday Care.',
     heading: <>Cleaning <span className="text-highlight-300">Beyond</span> Ordinary</>,
     description: 'Every Indian kitchen is unique. S CUBE is developed keeping everyday cleaning needs in mind, offering powerful grease removal together with suitability for a wide range of household utensils.',
     description2: 'From stainless steel cookware to traditional brass and copper pooja items, S CUBE delivers effective cleaning, rich foam, and a fresh fragrance that makes dishwashing easier and more enjoyable.',
-    image: 'https://images.unsplash.com/photo-1583947215259-38e31af8751f?w=1600',
+    image: 'https://i.pinimg.com/1200x/e5/58/2d/e5582d028e94af1fcfe4a416a31439d1.jpg',
   },
   {
     tagline: 'Trusted by Families Across India.',
     heading: <>One Product. <span className="text-highlight-300">Many</span> Uses.</>,
     description: 'S CUBE Dishwash Liquid is suitable for cleaning stainless steel, brass, copper, aluminium, glassware, and more. A concentrated formula that goes a long way, providing excellent value for every household.',
     description2: 'Quality checked, manufactured under hygienic conditions, and designed to make your kitchen cleaning quicker, easier, and more efficient.',
-    image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1600',
+    image: 'https://i.pinimg.com/736x/fa/66/7f/fa667fe3470c1cd0fdec29b049836ac6.jpg',
   },
 ];
 
