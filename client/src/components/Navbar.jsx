@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Package, Menu, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useCustomerAuth } from '../context/CustomerAuthContext';
 
@@ -31,6 +31,9 @@ export default function Navbar() {
             {links.map(l => (
               <Link key={l.to} to={l.to} className={`${isActive(l.to) ? 'text-accent-600 font-semibold' : 'text-gray-600 hover:text-accent-600'} transition-colors`}>{l.label}</Link>
             ))}
+            <Link to="/track-order" className={`flex items-center gap-1 text-sm ${isActive('/track-order') ? 'text-accent-600 font-semibold' : 'text-gray-600 hover:text-accent-600'} transition-colors`}>
+              <Package className="w-4 h-4" /> Track Order
+            </Link>
             <Link to="/cart" className={`relative text-gray-600 hover:text-accent-600 transition-colors ${isActive('/cart') ? 'text-accent-600 font-semibold' : ''}`}>
               <ShoppingCart className="w-5 h-5" />
               {itemCount > 0 && (
@@ -53,11 +56,7 @@ export default function Navbar() {
           </div>
 
           <button className="md:hidden text-gray-600 p-2" onClick={() => setOpen(!open)}>
-            {open ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-            )}
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -68,6 +67,9 @@ export default function Navbar() {
             {links.map(l => (
               <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className={`block px-3 py-2 rounded-lg ${isActive(l.to) ? 'bg-brand-50 text-accent-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'}`}>{l.label}</Link>
             ))}
+            <Link to="/track-order" onClick={() => setOpen(false)} className={`block px-3 py-2 rounded-lg ${isActive('/track-order') ? 'bg-brand-50 text-accent-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'}`}>
+              <Package className="w-4 h-4 inline mr-1" /> Track Order
+            </Link>
             <Link to="/cart" onClick={() => setOpen(false)} className={`block px-3 py-2 rounded-lg ${isActive('/cart') ? 'bg-brand-50 text-accent-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'}`}>
               <ShoppingCart className="w-5 h-5 inline mr-1" />
               Cart {itemCount > 0 && `(${itemCount})`}

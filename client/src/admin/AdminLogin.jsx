@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminLogin() {
@@ -27,9 +27,14 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-900/90 via-green-700/70 to-white/20">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-900/90 via-green-700/70 to-white/20 p-4">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md">
         <div className="text-center mb-6">
+          <div className="flex justify-center mb-3">
+            <div className="w-14 h-14 bg-brand-100 rounded-full flex items-center justify-center">
+              <Shield className="w-7 h-7 text-brand-600" />
+            </div>
+          </div>
           <h1 className="text-2xl font-bold text-gray-800">Admin Login</h1>
           <p className="text-gray-500 text-sm mt-1">S cube Admin Panel</p>
         </div>
@@ -39,11 +44,9 @@ export default function AdminLogin() {
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
+          <input required type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-400 text-sm" />
           <div className="relative">
-            <input required type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="w-full border rounded-lg pl-4 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent-400" />
-          </div>
-          <div className="relative">
-            <input required type={showPassword ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full border rounded-lg pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-accent-400" />
+            <input required type={showPassword ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full border rounded-lg pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-accent-400 text-sm" />
             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
@@ -53,6 +56,7 @@ export default function AdminLogin() {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
+        <p className="text-center text-xs text-gray-400 mt-4">Default: admin@vesselwash.com / admin123</p>
       </div>
     </div>
   );

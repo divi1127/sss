@@ -14,6 +14,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import MyOrders from './pages/MyOrders';
+import TrackOrder from './pages/TrackOrder';
 import AdminLogin from './admin/AdminLogin';
 import AdminLayout from './admin/AdminLayout';
 import AdminDashboard from './admin/AdminDashboard';
@@ -48,6 +49,8 @@ export default function App() {
               <Route path="/register" element={<CustomerLayout><Register /></CustomerLayout>} />
               <Route path="/login" element={<CustomerLayout><Login /></CustomerLayout>} />
               <Route path="/my-orders" element={<CustomerLayout><MyOrders /></CustomerLayout>} />
+              <Route path="/track-order" element={<CustomerLayout><TrackOrder /></CustomerLayout>} />
+              <Route path="/track-order/:id" element={<CustomerLayout><TrackOrder /></CustomerLayout>} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route element={<AdminRoute />}>
                 <Route element={<AdminLayout />}>
