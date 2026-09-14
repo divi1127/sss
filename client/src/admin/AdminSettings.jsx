@@ -12,9 +12,9 @@ export default function AdminSettings() {
     businessHours: 'Mon–Sat, 9AM–6PM',
   });
   const [emailSettings, setEmailSettings] = useState({
-    resendApiKey: '',
-    fromEmail: 'noreply@scube.in',
-    adminEmail: '',
+    brevoApiKey: '',
+    fromEmail: 'divyadharshini1109@gmail.com',
+    adminEmail: 'divyadharshini1109@gmail.com',
     sendOrderConfirmation: true,
     sendStatusUpdates: true,
     sendAdminAlerts: true,
@@ -96,38 +96,48 @@ export default function AdminSettings() {
           </div>
         </div>
 
-        {/* Email / Resend Settings */}
+        {/* Email / Brevo Settings */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
-            <Mail className="w-5 h-5 text-accent-600" /> Email Configuration (Resend)
+            <Mail className="w-5 h-5 text-accent-600" /> Email Configuration (Brevo)
           </h2>
           <p className="text-sm text-gray-500 mb-5">
-            Get your API key from{' '}
-            <a href="https://resend.com" target="_blank" rel="noopener noreferrer" className="text-accent-600 underline">resend.com</a>.
-            Free tier: 3,000 emails/month. Add the key to your <code className="bg-gray-100 px-1 rounded text-xs">server/.env</code> file.
+            API key from{' '}
+            <a href="https://app.brevo.com/settings/keys/api" target="_blank" rel="noopener noreferrer" className="text-accent-600 underline">brevo.com</a>.
+            Free plan sends 300 emails/day to any recipient without domain verification.
           </p>
           <div className="grid sm:grid-cols-2 gap-4 mb-5">
             <div className="sm:col-span-2">
-              <label className={labelClass}>Resend API Key</label>
+              <label className={labelClass}>Brevo API Key</label>
               <input
                 type="password"
-                placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxx"
-                value={emailSettings.resendApiKey}
-                onChange={e => setEmailSettings({...emailSettings, resendApiKey: e.target.value})}
+                placeholder="xkeysib-xxxxxxxxxxxxxxxxxxxxxxxx"
+                value={emailSettings.brevoApiKey}
+                onChange={e => setEmailSettings({...emailSettings, brevoApiKey: e.target.value})}
                 className={inputClass}
               />
-              <p className="text-xs text-gray-400 mt-1">Add as <code>RESEND_API_KEY</code> in server/.env on Render</p>
+              <p className="text-xs text-gray-400 mt-1">Set as <code>BREVO_API_KEY</code> on Render Environment</p>
             </div>
             <div>
-              <label className={labelClass}>From Email</label>
-              <input value={emailSettings.fromEmail} onChange={e => setEmailSettings({...emailSettings, fromEmail: e.target.value})} className={inputClass} placeholder="noreply@yourdomain.com" />
+              <label className={labelClass}>From Email Address (Brevo verified sender)</label>
+              <input
+                value={emailSettings.fromEmail}
+                onChange={e => setEmailSettings({...emailSettings, fromEmail: e.target.value})}
+                className={inputClass}
+                placeholder="divyadharshini1109@gmail.com"
+              />
+              <p className="text-xs text-gray-400 mt-1">Must match your Brevo account email</p>
             </div>
             <div>
-              <label className={labelClass}>Admin Email (for alerts)</label>
-              <input value={emailSettings.adminEmail} onChange={e => setEmailSettings({...emailSettings, adminEmail: e.target.value})} className={inputClass} placeholder="admin@gmail.com" />
+              <label className={labelClass}>Admin Alert Email</label>
+              <input
+                value={emailSettings.adminEmail}
+                onChange={e => setEmailSettings({...emailSettings, adminEmail: e.target.value})}
+                className={inputClass}
+                placeholder="divyadharshini1109@gmail.com"
+              />
+              <p className="text-xs text-gray-400 mt-1">Receives alerts on every new order</p>
             </div>
-          </div>
-
           {/* Notification Toggles */}
           <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
             <Bell className="w-4 h-4 text-gray-500" /> Email Notifications
