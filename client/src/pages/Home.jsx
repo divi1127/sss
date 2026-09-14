@@ -7,24 +7,21 @@ import ProductCard from '../components/ProductCard';
 const slides = [
   {
     tagline: 'Powerful Cleaning. Brilliant Shine. Trusted Every Day.',
-    heading: <>S CUBE <span className="text-highlight-300">Dishwash</span> Liquid</>,
+    heading: <>S CUBE <span className="text-brand-700">Dishwash</span> Liquid</>,
     description: 'Experience the perfect combination of powerful cleaning and everyday care with S CUBE Dishwash Liquid. Specially formulated to remove stubborn grease, oil, and food residue, S CUBE helps keep your utensils sparkling clean with every wash.',
     description2: 'Designed for modern kitchens and suitable for everyday household use, it is also suitable for cleaning traditional brass and copper pooja vessels when used as directed.',
-    image: 'https://i.pinimg.com/736x/4c/39/38/4c3938ab72b93022b7c83e506a3384e1.jpg',
   },
   {
     tagline: 'Rich Foam. Fresh Fragrance. Everyday Care.',
-    heading: <>Cleaning <span className="text-highlight-300">Beyond</span> Ordinary</>,
+    heading: <>Cleaning <span className="text-brand-700">Beyond</span> Ordinary</>,
     description: 'Every Indian kitchen is unique. S CUBE is developed keeping everyday cleaning needs in mind, offering powerful grease removal together with suitability for a wide range of household utensils.',
     description2: 'From stainless steel cookware to traditional brass and copper pooja items, S CUBE delivers effective cleaning, rich foam, and a fresh fragrance that makes dishwashing easier and more enjoyable.',
-    image: 'https://i.pinimg.com/1200x/e5/58/2d/e5582d028e94af1fcfe4a416a31439d1.jpg',
   },
   {
     tagline: 'Trusted by Families Across India.',
-    heading: <>One Product. <span className="text-highlight-300">Many</span> Uses.</>,
+    heading: <>One Product. <span className="text-brand-700">Many</span> Uses.</>,
     description: 'S CUBE Dishwash Liquid is suitable for cleaning stainless steel, brass, copper, aluminium, glassware, and more. A concentrated formula that goes a long way, providing excellent value for every household.',
     description2: 'Quality checked, manufactured under hygienic conditions, and designed to make your kitchen cleaning quicker, easier, and more efficient.',
-    image: 'https://i.pinimg.com/736x/fa/66/7f/fa667fe3470c1cd0fdec29b049836ac6.jpg',
   },
 ];
 
@@ -40,84 +37,116 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
+    const timer = setInterval(nextSlide, 6000);
     return () => clearInterval(timer);
   }, [nextSlide]);
 
   return (
     <div>
-      <section className="relative text-white overflow-hidden min-h-[90vh] flex items-center">
-        {slides.map((slide, i) => (
-          <div key={i} className={`absolute inset-0 transition-all duration-700 ease-in-out ${i === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}>
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slide.image})` }} />
-            <div className="absolute inset-0 bg-gradient-to-br from-green-900/88 via-green-800/72 to-green-900/82" />
-          </div>
-        ))}
+      <section className="relative overflow-hidden min-h-[92vh] flex items-center">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="/Kitchen_liquid.mp4" type="video/mp4" />
+        </video>
 
-        {/* Floating particles */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[
-            { size: 'w-72 h-72', pos: 'top-[-80px] right-[-40px]', anim: 'animate-float' },
-            { size: 'w-48 h-48', pos: 'bottom-[-60px] left-[-30px]', anim: 'animate-float-delayed' },
-            { size: 'w-32 h-32', pos: 'top-[30%] right-[10%]', anim: 'animate-float-slow' },
-            { size: 'w-20 h-20', pos: 'bottom-[20%] right-[25%]', anim: 'animate-float' },
-            { size: 'w-16 h-16', pos: 'top-[20%] left-[15%]', anim: 'animate-float-delayed' },
-          ].map((p, i) => (
-            <div key={i} className={`hero-particle ${p.size} ${p.pos} ${p.anim}`} />
-          ))}
-        </div>
+        {/* Subtle dark-tinted overlay for video depth */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-0 pointer-events-none" />
 
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="max-w-3xl transition-all duration-500" key={currentSlide}>
-            <span className="inline-block bg-highlight-500/20 text-highlight-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-highlight-400/30 animate-fade-in animation-fill-both">{slides[currentSlide].tagline}</span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.1s' }}>
-              {slides[currentSlide].heading}
-            </h1>
-            <p className="text-lg sm:text-xl text-brand-100 mb-4 max-w-2xl leading-relaxed animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.2s' }}>
-              {slides[currentSlide].description}
-            </p>
-            <p className="text-base text-brand-200 mb-8 max-w-2xl animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.3s' }}>
-              {slides[currentSlide].description2}
-            </p>
-            <div className="flex flex-wrap gap-4 animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.4s' }}>
-              <Link to="/products" className="inline-flex items-center bg-highlight-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-highlight-600 transition-all shadow-xl hover:shadow-2xl border border-highlight-400 hover:scale-105">
-                Buy Now <ChevronRight className="w-5 h-5 ml-1" />
-              </Link>
-              <Link to="/about#distributors" className="inline-flex items-center bg-white/15 backdrop-blur-sm border-2 border-white/40 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/25 transition-all shadow-xl hover:scale-105">
-                Become a Distributor
-              </Link>
-              <Link to="/about#contact" className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all shadow-xl hover:scale-105">
-                Contact Us
-              </Link>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+          {/* Frosted glass card with dark typography */}
+          <div className="max-w-2xl bg-white/90 backdrop-blur-md p-6 sm:p-10 md:p-12 rounded-3xl shadow-2xl border border-white/80 transition-all duration-500 animate-fade-in-up">
+            <div key={currentSlide} className="transition-all duration-500">
+              <span className="inline-block bg-brand-100 text-brand-900 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-4 border border-brand-200 animate-fade-in">
+                {slides[currentSlide].tagline}
+              </span>
+
+              <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight tracking-tight">
+                {slides[currentSlide].heading}
+              </h1>
+
+              <p className="text-base sm:text-lg text-gray-700 mb-3 leading-relaxed font-medium">
+                {slides[currentSlide].description}
+              </p>
+
+              <p className="text-sm sm:text-base text-gray-600 mb-8 leading-normal">
+                {slides[currentSlide].description2}
+              </p>
+
+              <div className="flex flex-wrap gap-3 sm:gap-4">
+                <Link
+                  to="/products"
+                  className="inline-flex items-center bg-brand-600 text-white px-7 py-3.5 rounded-xl font-bold text-base hover:bg-brand-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                >
+                  Buy Now <ChevronRight className="w-5 h-5 ml-1" />
+                </Link>
+                <Link
+                  to="/about#distributors"
+                  className="inline-flex items-center bg-gray-900 text-white px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base hover:bg-gray-800 transition-all shadow-md hover:scale-105"
+                >
+                  Become a Distributor
+                </Link>
+                <Link
+                  to="/about#contact"
+                  className="inline-flex items-center bg-white border-2 border-gray-300 text-gray-800 px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base hover:bg-gray-100 transition-all shadow-sm hover:scale-105"
+                >
+                  Contact Us
+                </Link>
+              </div>
+
+              {/* Dark Styled Stats Row */}
+              <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-8 pt-6 border-t border-gray-200/80">
+                {[
+                  { value: '500+', label: 'Happy Customers' },
+                  { value: '100%', label: 'Quality Assured' },
+                  { value: '3+', label: 'Product Sizes' },
+                ].map((s, i) => (
+                  <div key={i} className="bg-gray-50/80 border border-gray-200/60 p-2.5 sm:p-3 rounded-xl text-center">
+                    <p className="text-lg sm:text-xl font-black text-brand-700">{s.value}</p>
+                    <p className="text-[11px] sm:text-xs text-gray-600 font-semibold">{s.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Stats row */}
-            <div className="flex flex-wrap gap-6 mt-10 animate-fade-in animation-fill-both" style={{ animationDelay: '0.6s' }}>
-              {[
-                { value: '500+', label: 'Happy Customers' },
-                { value: '100%', label: 'Quality Assured' },
-                { value: '3+', label: 'Product Variants' },
-              ].map((s, i) => (
-                <div key={i} className="glass px-4 py-2.5 rounded-xl">
-                  <p className="text-xl font-bold text-highlight-300">{s.value}</p>
-                  <p className="text-xs text-brand-200">{s.label}</p>
-                </div>
-              ))}
+            {/* Slider Dots */}
+            <div className="flex items-center gap-2 mt-6 justify-between">
+              <div className="flex gap-2">
+                {slides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentSlide(i)}
+                    aria-label={`Slide ${i + 1}`}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      i === currentSlide ? 'bg-brand-600 w-8' : 'bg-gray-300 hover:bg-gray-400 w-2'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <div className="flex gap-1">
+                <button
+                  onClick={prevSlide}
+                  aria-label="Previous slide"
+                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                >
+                  <ChevronLeftIcon className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={nextSlide}
+                  aria-label="Next slide"
+                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                >
+                  <ChevronRightIcon className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-
-        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/25 backdrop-blur-sm rounded-full p-3 transition-all z-10 hidden sm:block hover:scale-110">
-          <ChevronLeftIcon className="w-6 h-6 text-white" />
-        </button>
-        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/25 backdrop-blur-sm rounded-full p-3 transition-all z-10 hidden sm:block hover:scale-110">
-          <ChevronRightIcon className="w-6 h-6 text-white" />
-        </button>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
-          {slides.map((_, i) => (
-            <button key={i} onClick={() => setCurrentSlide(i)} className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-highlight-500 w-8' : 'bg-white/50 hover:bg-white/70 w-2'}`} />
-          ))}
         </div>
       </section>
 
