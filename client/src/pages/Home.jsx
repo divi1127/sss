@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative overflow-hidden min-h-[84vh] md:min-h-[92vh] flex items-center">
+      <section className="relative overflow-hidden min-h-screen flex items-center">
         {/* Background Video */}
         <video
           autoPlay
@@ -58,7 +58,7 @@ export default function Home() {
         {/* Soft natural fade on left side for text readability (no hard card box) */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent z-0 pointer-events-none w-full md:w-2/3" />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           {/* Simple left-aligned content without white card frame */}
           <div className="max-w-xl transition-all duration-500 animate-fade-in">
             <div key={currentSlide} className="transition-all duration-500">
@@ -222,26 +222,89 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12 animate-fade-in-up">
-          <span className="text-accent-600 font-semibold text-sm tracking-wider uppercase">One Product. Many Uses.</span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mt-2">Versatile Cleaning Solution</h2>
-          <p className="text-gray-500 mt-3 max-w-2xl mx-auto">S CUBE Dishwash Liquid is suitable for cleaning a variety of household utensils.</p>
+      {/* ─── One Product. Many Uses. (Versatile Cleaning Solution UI) ─── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-14 animate-fade-in-up">
+          <span className="inline-block bg-brand-100 text-brand-800 text-xs sm:text-sm font-bold tracking-wider uppercase px-4 py-1.5 rounded-full border border-brand-200 mb-3">
+            One Product. Many Uses.
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
+            Versatile Cleaning Solution
+          </h2>
+          <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+            One concentrated formula engineered for traditional Indian homes. From tough cookware grease to delicate brass pooja lamps.
+          </p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 animate-fade-in-up">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            'Stainless Steel Utensils', 'Brass Vessels', 'Brass Lamps', 'Brass Bells',
-            'Brass Statues', 'Copper Utensils', 'Aluminium Utensils', 'Glassware',
-            'Ceramic Plates*', 'Melamine Utensils*', 'Kitchen Cookware', 'Dining Plates',
-            'Bowls', 'Spoons', 'Serving Dishes',
-          ].map((item, i) => (
-            <div key={i} className="flex items-center gap-2 bg-white border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-all">
-              <Check className="w-4 h-4 text-brand-500 flex-shrink-0" />
-              <span className="text-sm text-gray-700">{item}</span>
+            {
+              title: 'Pooja Essentials',
+              badge: 'Traditional Care',
+              badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+              icon: '🪔',
+              desc: 'Restores golden glow and shines brass & copper without harsh tarnishing.',
+              items: ['Brass Lamps (Deepam)', 'Copper Vessels (Chembu)', 'Pooja Bells & Plates', 'Brass Statues & Idols'],
+              bg: 'from-amber-50/70 to-orange-50/40',
+              accent: 'border-amber-200/80',
+            },
+            {
+              title: 'Heavy Cookware',
+              badge: 'Tough On Grease',
+              badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200',
+              icon: '🍳',
+              desc: 'Instantly dissolves burnt food, heavy curry oil, and stubborn stains.',
+              items: ['Stainless Steel Pots', 'Pressure Cookers', 'Cast Iron / Tawa', 'Aluminium Kadai'],
+              bg: 'from-emerald-50/70 to-teal-50/40',
+              accent: 'border-emerald-200/80',
+            },
+            {
+              title: 'Daily Dining',
+              badge: 'Sparkling Fresh',
+              badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
+              icon: '🍽️',
+              desc: 'Rich foam spreads quickly, leaving plates sparkling clean and fragrant.',
+              items: ['Dining Plates & Thali', 'Curry Bowls & Spoons', 'Stainless Steel Tumblers', 'Serving Dishes'],
+              bg: 'from-blue-50/70 to-sky-50/40',
+              accent: 'border-blue-200/80',
+            },
+            {
+              title: 'Glass & Crockery',
+              badge: 'Streak-Free',
+              badgeColor: 'bg-purple-100 text-purple-900 border-purple-200',
+              icon: '🍷',
+              desc: 'Gentle on delicate surfaces, rinses completely with zero water spots.',
+              items: ['Glassware & Tumblers', 'Ceramic Dinnerware', 'Melamine Plates', 'Coffee & Tea Cups'],
+              bg: 'from-purple-50/70 to-violet-50/40',
+              accent: 'border-purple-200/80',
+            },
+          ].map((cat, i) => (
+            <div
+              key={i}
+              className={`rounded-2xl p-6 bg-gradient-to-b ${cat.bg} border ${cat.accent} shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl">{cat.icon}</span>
+                  <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${cat.badgeColor}`}>
+                    {cat.badge}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{cat.title}</h3>
+                <p className="text-xs sm:text-sm text-gray-600 mb-5 leading-relaxed">{cat.desc}</p>
+                <div className="space-y-2">
+                  {cat.items.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/80">
+                      <Check className="w-3.5 h-3.5 text-brand-600 flex-shrink-0" />
+                      <span className="font-medium">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        <p className="text-xs text-gray-400 mt-3 text-center">*Always follow the manufacturer's care instructions where applicable.</p>
+        <p className="text-xs text-gray-400 mt-6 text-center italic">* Always follow manufacturer care guidelines for delicate ceramics.</p>
       </section>
 
       <section className="bg-brand-600 py-16">
@@ -318,37 +381,125 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-16">
+      {/* ─── Available Pack Sizes (Modern Card Showcase UI) ─── */}
+      <section className="bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 animate-fade-in-up">
-            <span className="text-accent-600 font-semibold text-sm tracking-wider uppercase">Pack Sizes</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mt-2">Available Pack Sizes</h2>
-            <p className="text-gray-500 mt-3">Choose the size that best fits your needs.</p>
+          <div className="text-center mb-14 animate-fade-in-up">
+            <span className="inline-block bg-brand-100 text-brand-800 text-xs sm:text-sm font-bold tracking-wider uppercase px-4 py-1.5 rounded-full border border-brand-200 mb-3">
+              Pack Sizes
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
+              Available Pack Sizes
+            </h2>
+            <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-base sm:text-lg">
+              Choose the perfect size for your household or commercial kitchen needs.
+            </p>
           </div>
-          <div className="overflow-x-auto animate-fade-in-up">
-            <table className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100">
-              <thead className="bg-brand-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Size</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Suitable For</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {[
-                  ['250 ml', 'Individual & Small Families'],
-                  ['500 ml', 'Regular Household Use'],
-                  ['750 ml', 'Medium Families'],
-                  ['1 Litre', 'Value Pack'],
-                  ['2 Litre', 'Refill Pack'],
-                  ['5 Litre', 'Hotels, Restaurants & Commercial Use'],
-                ].map(([size, use], i) => (
-                  <tr key={i} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-semibold text-gray-800">{size}</td>
-                    <td className="px-6 py-4 text-gray-600">{use}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                size: '250 ml',
+                badge: 'TRIAL PACK',
+                badgeStyle: 'bg-gray-100 text-gray-700 border-gray-200',
+                ideal: 'Individuals & Small Families',
+                desc: 'Compact and easy to handle by the sink. Great for first-time users.',
+                features: ['Up to 50 Washes', 'Ergonomic Grip Bottle', 'Zero Wastage Cap'],
+                highlight: false,
+              },
+              {
+                size: '500 ml',
+                badge: 'MOST POPULAR',
+                badgeStyle: 'bg-brand-600 text-white border-brand-500 shadow-sm',
+                ideal: 'Regular Household Use (3–4 Members)',
+                desc: 'The daily kitchen favorite. Perfect balance of quantity, convenience, and value.',
+                features: ['Up to 120 Washes', 'Push-Pull Dispenser Cap', 'Rich Concentrated Foam'],
+                highlight: true,
+              },
+              {
+                size: '750 ml',
+                badge: 'FAMILY PACK',
+                badgeStyle: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                ideal: 'Medium to Large Families',
+                desc: 'Designed for daily Indian cooking with heavy oil and turmeric cleaning needs.',
+                features: ['Up to 180 Washes', 'Economical Daily Use', 'Long-lasting Lemon Freshness'],
+                highlight: false,
+              },
+              {
+                size: '1 Litre',
+                badge: 'VALUE PACK',
+                badgeStyle: 'bg-blue-100 text-blue-800 border-blue-300',
+                ideal: 'Maximum Household Savings',
+                desc: 'Extra quantity at a lower cost per wash. Lasts several weeks for busy homes.',
+                features: ['Up to 260 Washes', 'Best Price Per ml', 'Easy Refill Ready'],
+                highlight: false,
+              },
+              {
+                size: '2 Litre',
+                badge: 'MEGA SAVER',
+                badgeStyle: 'bg-purple-100 text-purple-800 border-purple-300',
+                ideal: 'Refill Pack For All Dispensers',
+                desc: 'Economical bulk pack with built-in carry handle for easy bottle refills.',
+                features: ['Convenient Pour Spout', 'Heavy Duty Handle', 'Eco-friendly Refill Option'],
+                highlight: false,
+              },
+              {
+                size: '5 Litre',
+                badge: 'COMMERCIAL BULK',
+                badgeStyle: 'bg-amber-100 text-amber-900 border-amber-300',
+                ideal: 'Hotels, Catering & Restaurants',
+                desc: 'Heavy-duty volume for professional kitchens, canteens, temples, and large events.',
+                features: ['Commercial Grade Formula', 'Industrial Sturdy Can', 'Bulk Wholesale Pricing'],
+                highlight: false,
+              },
+            ].map((pack, i) => (
+              <div
+                key={i}
+                className={`relative rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between ${
+                  pack.highlight
+                    ? 'bg-white border-2 border-brand-500 shadow-xl ring-4 ring-brand-500/10'
+                    : 'bg-white border border-gray-200 shadow-md hover:shadow-xl'
+                }`}
+              >
+                {pack.highlight && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-600 to-brand-700 text-white font-black text-[11px] uppercase tracking-widest px-4 py-1 rounded-full shadow-md">
+                    ★ Best Seller ★
+                  </div>
+                )}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full border ${pack.badgeStyle}`}>
+                      {pack.badge}
+                    </span>
+                    <span className="text-2xl">🧴</span>
+                  </div>
+
+                  <h3 className="text-3xl font-extrabold text-gray-900 mb-1">{pack.size}</h3>
+                  <p className="text-sm font-semibold text-brand-700 mb-3">{pack.ideal}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-6 leading-relaxed">{pack.desc}</p>
+
+                  <div className="space-y-2.5 pt-4 border-t border-gray-100 mb-6">
+                    {pack.features.map((f, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
+                        <Check className="w-4 h-4 text-brand-600 flex-shrink-0" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  to="/products"
+                  className={`w-full py-3 rounded-xl font-bold text-sm text-center transition-all flex items-center justify-center gap-1.5 shadow-sm ${
+                    pack.highlight
+                      ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-md hover:shadow-lg'
+                      : 'bg-gray-100 text-gray-800 hover:bg-brand-600 hover:text-white'
+                  }`}
+                >
+                  Order {pack.size} <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>

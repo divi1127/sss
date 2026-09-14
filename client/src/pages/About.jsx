@@ -5,8 +5,8 @@ export default function About() {
   return (
     <div>
       <section className="relative text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1600)' }}></div>
-        <div className="absolute inset-0 bg-green-900/80"></div>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(https://i.pinimg.com/1200x/e5/58/2d/e5582d028e94af1fcfe4a416a31439d1.jpg)' }}></div>
+        <div className="absolute inset-0 bg-green-950/80"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
           <span className="text-brand-200 font-semibold text-sm tracking-wider uppercase">About S CUBE</span>
           <h1 className="text-4xl sm:text-5xl font-bold mt-2 mb-4">Cleaning Beyond Ordinary</h1>
@@ -30,9 +30,18 @@ export default function About() {
             </p>
           </div>
           <div className="animate-fade-in-right">
-            <div className="bg-gradient-to-br from-brand-50 to-accent-50 rounded-2xl p-8 shadow-lg">
-              <img src="/logo.png" alt="S CUBE" className="w-48 h-48 object-contain mx-auto mb-4" />
-              <p className="text-center text-lg font-bold text-gray-800">S CUBE — Cleaning Beyond Ordinary.</p>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl group border border-gray-100">
+              <img
+                src="https://i.pinimg.com/1200x/e5/58/2d/e5582d028e94af1fcfe4a416a31439d1.jpg"
+                alt="S CUBE Dishwash Liquid"
+                className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                <div>
+                  <p className="text-white text-xl font-bold">S CUBE Dishwash Liquid</p>
+                  <p className="text-brand-200 text-sm">Powerful Cleaning. Everyday Care.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
