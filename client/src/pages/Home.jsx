@@ -33,7 +33,7 @@ export default function Home() {
   const prevSlide = useCallback(() => setCurrentSlide(s => (s - 1 + slides.length) % slides.length), []);
 
   useEffect(() => {
-    api.get('/products').then(res => setProducts(res.data.slice(0, 4))).catch(() => {});
+    api.get('/products').then(res => setProducts(res.data.slice(0, 4))).catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="relative overflow-hidden min-h-[92vh] flex items-center">
+      <section className="relative overflow-hidden min-h-[84vh] md:min-h-[92vh] flex items-center">
         {/* Background Video */}
         <video
           autoPlay
@@ -55,94 +55,93 @@ export default function Home() {
           <source src="/Kitchen_liquid.mp4" type="video/mp4" />
         </video>
 
-        {/* Subtle dark-tinted overlay for video depth */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-0 pointer-events-none" />
+        {/* Soft natural fade on left side for text readability (no hard card box) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent z-0 pointer-events-none w-full md:w-2/3" />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-          {/* Frosted glass card with dark typography */}
-          <div className="max-w-2xl bg-white/90 backdrop-blur-md p-6 sm:p-10 md:p-12 rounded-3xl shadow-2xl border border-white/80 transition-all duration-500 animate-fade-in-up">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          {/* Simple left-aligned content without white card frame */}
+          <div className="max-w-xl transition-all duration-500 animate-fade-in">
             <div key={currentSlide} className="transition-all duration-500">
-              <span className="inline-block bg-brand-100 text-brand-900 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-4 border border-brand-200 animate-fade-in">
+              <span className="inline-block bg-brand-100/90 text-brand-900 px-3.5 py-1 rounded-full text-xs font-bold mb-3 border border-brand-200">
                 {slides[currentSlide].tagline}
               </span>
 
-              <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight tracking-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 leading-tight tracking-tight">
                 {slides[currentSlide].heading}
               </h1>
 
-              <p className="text-base sm:text-lg text-gray-700 mb-3 leading-relaxed font-medium">
+              <p className="text-sm sm:text-base text-gray-800 mb-2 leading-relaxed font-medium">
                 {slides[currentSlide].description}
               </p>
 
-              <p className="text-sm sm:text-base text-gray-600 mb-8 leading-normal">
+              <p className="text-xs sm:text-sm text-gray-600 mb-6 leading-relaxed">
                 {slides[currentSlide].description2}
               </p>
 
-              <div className="flex flex-wrap gap-3 sm:gap-4">
+              <div className="flex flex-wrap items-center gap-3">
                 <Link
                   to="/products"
-                  className="inline-flex items-center bg-brand-600 text-white px-7 py-3.5 rounded-xl font-bold text-base hover:bg-brand-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                  className="inline-flex items-center bg-brand-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-700 transition-all shadow-md hover:shadow-lg hover:scale-105"
                 >
-                  Buy Now <ChevronRight className="w-5 h-5 ml-1" />
+                  Buy Now <ChevronRight className="w-4 h-4 ml-1" />
                 </Link>
                 <Link
                   to="/about#distributors"
-                  className="inline-flex items-center bg-gray-900 text-white px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base hover:bg-gray-800 transition-all shadow-md hover:scale-105"
+                  className="inline-flex items-center bg-gray-900 text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-all shadow-md hover:scale-105"
                 >
                   Become a Distributor
                 </Link>
                 <Link
                   to="/about#contact"
-                  className="inline-flex items-center bg-white border-2 border-gray-300 text-gray-800 px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base hover:bg-gray-100 transition-all shadow-sm hover:scale-105"
+                  className="inline-flex items-center bg-white/90 border border-gray-300 text-gray-800 px-5 py-3 rounded-xl font-semibold text-sm hover:bg-white transition-all shadow-sm hover:scale-105"
                 >
                   Contact Us
                 </Link>
               </div>
 
-              {/* Dark Styled Stats Row */}
-              <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-8 pt-6 border-t border-gray-200/80">
+              {/* Simple subtle stats line */}
+              <div className="flex items-center gap-6 mt-6 pt-5 border-t border-gray-300/60">
                 {[
                   { value: '500+', label: 'Happy Customers' },
                   { value: '100%', label: 'Quality Assured' },
-                  { value: '3+', label: 'Product Sizes' },
+                  { value: '3+', label: 'Sizes Available' },
                 ].map((s, i) => (
-                  <div key={i} className="bg-gray-50/80 border border-gray-200/60 p-2.5 sm:p-3 rounded-xl text-center">
-                    <p className="text-lg sm:text-xl font-black text-brand-700">{s.value}</p>
-                    <p className="text-[11px] sm:text-xs text-gray-600 font-semibold">{s.label}</p>
+                  <div key={i}>
+                    <p className="text-base sm:text-lg font-extrabold text-brand-800">{s.value}</p>
+                    <p className="text-[11px] text-gray-600 font-medium">{s.label}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Slider Dots */}
-            <div className="flex items-center gap-2 mt-6 justify-between">
-              <div className="flex gap-2">
+            {/* Slider Dots & Navigation */}
+            <div className="flex items-center gap-3 mt-5">
+              <div className="flex gap-1.5">
                 {slides.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrentSlide(i)}
                     aria-label={`Slide ${i + 1}`}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      i === currentSlide ? 'bg-brand-600 w-8' : 'bg-gray-300 hover:bg-gray-400 w-2'
-                    }`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-brand-600 w-6' : 'bg-gray-400/60 hover:bg-gray-600 w-1.5'
+                      }`}
                   />
                 ))}
               </div>
 
-              <div className="flex gap-1">
+              <div className="flex gap-1 ml-2">
                 <button
                   onClick={prevSlide}
                   aria-label="Previous slide"
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                  className="w-7 h-7 rounded-full bg-white/80 hover:bg-white border border-gray-300 flex items-center justify-center text-gray-700 transition-all shadow-sm"
                 >
-                  <ChevronLeftIcon className="w-4 h-4" />
+                  <ChevronLeftIcon className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={nextSlide}
                   aria-label="Next slide"
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                  className="w-7 h-7 rounded-full bg-white/80 hover:bg-white border border-gray-300 flex items-center justify-center text-gray-700 transition-all shadow-sm"
                 >
-                  <ChevronRightIcon className="w-4 h-4" />
+                  <ChevronRightIcon className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
