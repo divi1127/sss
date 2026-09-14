@@ -138,6 +138,8 @@ export default function AdminSettings() {
               />
               <p className="text-xs text-gray-400 mt-1">Receives alerts on every new order</p>
             </div>
+          </div>
+
           {/* Notification Toggles */}
           <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
             <Bell className="w-4 h-4 text-gray-500" /> Email Notifications
