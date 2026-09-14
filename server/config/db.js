@@ -117,6 +117,25 @@ async function initDB() {
     )
   `);
 
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      order_id INT,
+      product_id INT,
+      customer_name VARCHAR(255) DEFAULT 'Anonymous',
+      rating INT NOT NULL,
+      comment TEXT,
+      status ENUM('pending','approved','rejected') DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE SET NULL,
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+    )
+  `);
+
+  // Add tracking columns to orders if not exist
+  try { await conn.query('ALTER TABLE orders ADD COLUMN tracking_number VARCHAR(255) NULL'); } catch (e) {}
+  try { await conn.query('ALTER TABLE orders ADD COLUMN estimated_delivery DATE NULL'); } catch (e) {}
+
   conn.release();
   console.log('Database initialized successfully');
 }

@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CustomerAuthProvider } from './context/CustomerAuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import About from './pages/About';
 import Products from './pages/Products';
@@ -26,6 +27,11 @@ import AdminProducts from './admin/AdminProducts';
 import AdminOrders from './admin/AdminOrders';
 import AdminPayments from './admin/AdminPayments';
 import AdminCustomers from './admin/AdminCustomers';
+import AdminReports from './admin/AdminReports';
+import AdminAnalytics from './admin/AdminAnalytics';
+import AdminSettings from './admin/AdminSettings';
+import AdminNotifications from './admin/AdminNotifications';
+import AdminReviews from './admin/AdminReviews';
 import AdminRoute from './components/AdminRoute';
 
 function CustomerLayout({ children }) {
@@ -44,6 +50,7 @@ export default function App() {
       <AuthProvider>
         <CustomerAuthProvider>
           <CartProvider>
+            <ScrollToTopButton />
             <Routes>
               <Route path="/" element={<CustomerLayout><Home /></CustomerLayout>} />
               <Route path="/about" element={<CustomerLayout><About /></CustomerLayout>} />
@@ -69,6 +76,11 @@ export default function App() {
                   <Route path="/admin/orders" element={<AdminOrders />} />
                   <Route path="/admin/payments" element={<AdminPayments />} />
                   <Route path="/admin/customers" element={<AdminCustomers />} />
+                  <Route path="/admin/reports" element={<AdminReports />} />
+                  <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                  <Route path="/admin/settings" element={<AdminSettings />} />
+                  <Route path="/admin/notifications" element={<AdminNotifications />} />
+                  <Route path="/admin/reviews" element={<AdminReviews />} />
                 </Route>
               </Route>
             </Routes>

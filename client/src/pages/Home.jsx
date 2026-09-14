@@ -50,45 +50,73 @@ export default function Home() {
         {slides.map((slide, i) => (
           <div key={i} className={`absolute inset-0 transition-all duration-700 ease-in-out ${i === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'}`}>
             <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slide.image})` }} />
-            <div className="absolute inset-0 bg-gradient-to-br from-green-900/85 via-green-800/70 to-green-900/80" />
+            <div className="absolute inset-0 bg-gradient-to-br from-green-900/88 via-green-800/72 to-green-900/82" />
           </div>
         ))}
+
+        {/* Floating particles */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[
+            { size: 'w-72 h-72', pos: 'top-[-80px] right-[-40px]', anim: 'animate-float' },
+            { size: 'w-48 h-48', pos: 'bottom-[-60px] left-[-30px]', anim: 'animate-float-delayed' },
+            { size: 'w-32 h-32', pos: 'top-[30%] right-[10%]', anim: 'animate-float-slow' },
+            { size: 'w-20 h-20', pos: 'bottom-[20%] right-[25%]', anim: 'animate-float' },
+            { size: 'w-16 h-16', pos: 'top-[20%] left-[15%]', anim: 'animate-float-delayed' },
+          ].map((p, i) => (
+            <div key={i} className={`hero-particle ${p.size} ${p.pos} ${p.anim}`} />
+          ))}
+        </div>
+
         <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="max-w-3xl transition-all duration-500" key={currentSlide}>
-            <span className="inline-block bg-highlight-500/20 text-highlight-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-highlight-400/30 animate-fade-in-up">{slides[currentSlide].tagline}</span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <span className="inline-block bg-highlight-500/20 text-highlight-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-highlight-400/30 animate-fade-in animation-fill-both">{slides[currentSlide].tagline}</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.1s' }}>
               {slides[currentSlide].heading}
             </h1>
-            <p className="text-lg sm:text-xl text-brand-100 mb-4 max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg sm:text-xl text-brand-100 mb-4 max-w-2xl leading-relaxed animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.2s' }}>
               {slides[currentSlide].description}
             </p>
-            <p className="text-base text-brand-200 mb-8 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <p className="text-base text-brand-200 mb-8 max-w-2xl animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.3s' }}>
               {slides[currentSlide].description2}
             </p>
-            <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-              <Link to="/products" className="inline-flex items-center bg-highlight-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-highlight-600 transition-all shadow-xl hover:shadow-2xl border border-highlight-400">
+            <div className="flex flex-wrap gap-4 animate-fade-in-up animation-fill-both" style={{ animationDelay: '0.4s' }}>
+              <Link to="/products" className="inline-flex items-center bg-highlight-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-highlight-600 transition-all shadow-xl hover:shadow-2xl border border-highlight-400 hover:scale-105">
                 Buy Now <ChevronRight className="w-5 h-5 ml-1" />
               </Link>
-              <Link to="/about#distributors" className="inline-flex items-center bg-white/15 backdrop-blur-sm border-2 border-white/40 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/25 transition-all shadow-xl">
+              <Link to="/about#distributors" className="inline-flex items-center bg-white/15 backdrop-blur-sm border-2 border-white/40 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/25 transition-all shadow-xl hover:scale-105">
                 Become a Distributor
               </Link>
-              <Link to="/about#contact" className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all shadow-xl">
+              <Link to="/about#contact" className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all shadow-xl hover:scale-105">
                 Contact Us
               </Link>
+            </div>
+
+            {/* Stats row */}
+            <div className="flex flex-wrap gap-6 mt-10 animate-fade-in animation-fill-both" style={{ animationDelay: '0.6s' }}>
+              {[
+                { value: '500+', label: 'Happy Customers' },
+                { value: '100%', label: 'Quality Assured' },
+                { value: '3+', label: 'Product Variants' },
+              ].map((s, i) => (
+                <div key={i} className="glass px-4 py-2.5 rounded-xl">
+                  <p className="text-xl font-bold text-highlight-300">{s.value}</p>
+                  <p className="text-xs text-brand-200">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all z-10 hidden sm:block">
+        <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/25 backdrop-blur-sm rounded-full p-3 transition-all z-10 hidden sm:block hover:scale-110">
           <ChevronLeftIcon className="w-6 h-6 text-white" />
         </button>
-        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all z-10 hidden sm:block">
+        <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/25 backdrop-blur-sm rounded-full p-3 transition-all z-10 hidden sm:block hover:scale-110">
           <ChevronRightIcon className="w-6 h-6 text-white" />
         </button>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
           {slides.map((_, i) => (
-            <button key={i} onClick={() => setCurrentSlide(i)} className={`w-3 h-3 rounded-full transition-all ${i === currentSlide ? 'bg-highlight-500 w-8' : 'bg-white/50 hover:bg-white/70'}`} />
+            <button key={i} onClick={() => setCurrentSlide(i)} className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-highlight-500 w-8' : 'bg-white/50 hover:bg-white/70 w-2'}`} />
           ))}
         </div>
       </section>
@@ -398,7 +426,7 @@ export default function Home() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Phone, title: 'Phone', value: '+91 88257 33129', action: 'tel:+918825733129' },
+              { icon: Phone, title: 'Phone', value: '04322 222646', action: 'tel:0432222646' },
               { icon: MessageCircle, title: 'WhatsApp', value: '+91 88257 33129', action: 'https://wa.me/918825733129' },
               { icon: Mail, title: 'Email', value: 'info@scube.in', action: 'mailto:info@scube.in' },
               { icon: HeadphonesIcon, title: 'Business Hours', value: 'Mon-Sat, 9AM-6PM', action: '#' },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ShoppingCart, Eye, Search, X, Filter } from 'lucide-react';
+import { ShoppingCart, Eye, Search, X, Filter, Download, Truck } from 'lucide-react';
 import api from '../api/axios';
 
 const STATUSES = ['Payment Verification Pending', 'Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled', 'Payment Failed', 'Pending'];
@@ -36,11 +36,15 @@ export default function AdminOrders() {
     } catch { alert('Failed to load order'); }
   };
 
-  const updateStatus = async (id, status) => {
+  const updateStatus = async (id, status, trackingNumber, estimatedDelivery) => {
     try {
-      await api.put(`/orders/${id}/status`, { status });
+      await api.put(`/orders/${id}/status`, {
+        status,
+        ...(trackingNumber !== undefined ? { tracking_number: trackingNumber } : {}),
+        ...(estimatedDelivery !== undefined ? { estimated_delivery: estimatedDelivery } : {}),
+      });
       loadOrders();
-      if (detail && detail.id === id) setDetail({ ...detail, status });
+      if (detail && detail.id === id) setDetail({ ...detail, status, tracking_number: trackingNumber, estimated_delivery: estimatedDelivery });
     } catch { alert('Failed to update status'); }
   };
 
@@ -52,6 +56,16 @@ export default function AdminOrders() {
           Orders
           <span className="text-base font-normal text-gray-400">({filtered.length})</span>
         </h1>
+        <button
+          onClick={() => {
+            const rows = [['ID','Customer','Phone','Amount','Status','Source','Date'], ...filtered.map(o => [o.id, o.customer_name, o.customer_phone, parseFloat(o.total_amount).toFixed(2), o.status, o.order_source, new Date(o.created_at).toLocaleDateString()])];
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='orders.csv'; a.click();
+          }}
+          className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition-colors"
+        >
+          <Download className="w-4 h-4" /> Export CSV
+        </button>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -169,11 +183,38 @@ export default function AdminOrders() {
 
             <div className="border-t pt-4">
               <strong className="text-sm">Update Status:</strong>
-              <div className="flex flex-wrap gap-2 mt-2">
+
+              <div className="grid grid-cols-2 gap-2 mt-2 mb-3">
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Tracking Number</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. TRK123456"
+                    defaultValue={detail.tracking_number || ''}
+                    id="trackingInput"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">Estimated Delivery</label>
+                  <input
+                    type="date"
+                    defaultValue={detail.estimated_delivery ? detail.estimated_delivery.substring(0,10) : ''}
+                    id="deliveryInput"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
                 {STATUSES.map(s => (
                   <button
                     key={s}
-                    onClick={() => updateStatus(detail.id, s)}
+                    onClick={() => updateStatus(
+                      detail.id, s,
+                      document.getElementById('trackingInput')?.value,
+                      document.getElementById('deliveryInput')?.value,
+                    )}
                     disabled={s === detail.status}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                       s === detail.status
@@ -182,6 +223,10 @@ export default function AdminOrders() {
                         ? 'bg-red-100 text-red-700 hover:bg-red-200'
                         : s === 'Confirmed'
                         ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : s === 'Out for Delivery'
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                        : s === 'Delivered'
+                        ? 'bg-teal-100 text-teal-700 hover:bg-teal-200'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >

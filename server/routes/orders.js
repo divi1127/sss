@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/auth');
 const upload = require('../middleware/upload');
 const customerAuth = require('./customerAuth');
 const { transformItem, transformArray } = require('../utils/url');
-const { sendOrderConfirmation, sendStatusUpdate } = require('../utils/email');
+const { sendOrderConfirmation, sendAdminOrderAlert, sendStatusUpdate, sendDeliveryReviewRequest } = require('../utils/email');
 
 const router = express.Router();
 
@@ -72,8 +72,10 @@ router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
     }
 
     if (customerEmail) {
-      sendOrderConfirmation(transformItem(orderRows[0]), itemRows, customerEmail);
+      sendOrderConfirmation(transformItem(orderRows[0]), itemRows, customerEmail).catch(() => {});
     }
+    // Alert admin of new order
+    sendAdminOrderAlert(transformItem({ ...orderRows[0], customer_name: customerName, customer_phone: customerPhone, order_source: source }), itemRows).catch(() => {});
 
     res.status(201).json({
       orderId,
@@ -124,6 +126,7 @@ router.get('/track/:id', async (req, res) => {
   try {
     const [orders] = await pool.query(`
       SELECT o.id, o.total_amount, o.order_source, o.status, o.created_at,
+             o.tracking_number, o.estimated_delivery,
              c.name as customer_name, c.phone as customer_phone
       FROM orders o
       JOIN customers c ON o.customer_id = c.id
@@ -171,13 +174,19 @@ router.get('/:id', authMiddleware, async (req, res) => {
 
 router.put('/:id/status', authMiddleware, async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, tracking_number, estimated_delivery } = req.body;
     const validStatuses = ['Payment Verification Pending', 'Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled', 'Payment Failed', 'Pending'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
 
-    await pool.query('UPDATE orders SET status = ? WHERE id = ?', [status, req.params.id]);
+    let updateQuery = 'UPDATE orders SET status = ?';
+    const updateParams = [status];
+    if (tracking_number !== undefined) { updateQuery += ', tracking_number = ?'; updateParams.push(tracking_number || null); }
+    if (estimated_delivery !== undefined) { updateQuery += ', estimated_delivery = ?'; updateParams.push(estimated_delivery || null); }
+    updateQuery += ' WHERE id = ?';
+    updateParams.push(req.params.id);
+    await pool.query(updateQuery, updateParams);
 
     const [orders] = await pool.query(`
       SELECT o.*, c.name as customer_name, c.phone as customer_phone, c.email as customer_email
@@ -187,7 +196,10 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
     `, [req.params.id]);
 
     if (orders.length > 0 && orders[0].customer_email) {
-      sendStatusUpdate(orders[0], orders[0].customer_email);
+      sendStatusUpdate(orders[0], orders[0].customer_email).catch(() => {});
+      if (status === 'Delivered') {
+        setTimeout(() => sendDeliveryReviewRequest(orders[0], orders[0].customer_email).catch(() => {}), 3000);
+      }
     }
 
     res.json({ message: 'Order status updated', status });
