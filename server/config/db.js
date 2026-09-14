@@ -135,6 +135,7 @@ async function initDB() {
   // Add tracking columns to orders if not exist
   try { await conn.query('ALTER TABLE orders ADD COLUMN tracking_number VARCHAR(255) NULL'); } catch (e) {}
   try { await conn.query('ALTER TABLE orders ADD COLUMN estimated_delivery DATE NULL'); } catch (e) {}
+  try { await conn.query('ALTER TABLE products MODIFY COLUMN image_url LONGTEXT'); } catch (e) {}
 
   conn.release();
   console.log('Database initialized successfully');

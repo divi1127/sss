@@ -54,10 +54,23 @@ export default function ProductDetail() {
         <div className="animate-fade-in-left">
           <div className="h-72 sm:h-96 bg-gray-100 rounded-2xl flex items-center justify-center overflow-hidden shadow-lg">
             {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-            ) : (
-              <FlaskConical className="text-gray-400 w-20 h-20" />
-            )}
+              <img
+                src={product.image_url}
+                alt={product.name}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = 'flex';
+                }}
+              />
+            ) : null}
+            <div
+              className={`w-full h-full bg-gradient-to-br from-brand-50 to-accent-50 flex items-center justify-center ${
+                product.image_url ? 'hidden' : 'flex'
+              }`}
+            >
+              <FlaskConical className="text-brand-500 w-20 h-20 opacity-60" />
+            </div>
           </div>
         </div>
 

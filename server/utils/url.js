@@ -1,7 +1,7 @@
 function getFullImageUrl(path) {
   if (!path) return null;
-  if (path.startsWith('http')) return path;
-  const baseUrl = process.env.SERVER_URL || `http://localhost:${process.env.PORT || 5000}`;
+  if (path.startsWith('http') || path.startsWith('data:')) return path;
+  const baseUrl = process.env.SERVER_URL || (process.env.NODE_ENV === 'production' ? 'https://sss-6ws4.onrender.com' : `http://localhost:${process.env.PORT || 5000}`);
   return `${baseUrl}${path}`;
 }
 

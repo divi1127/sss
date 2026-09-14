@@ -57,8 +57,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
   try {
-    const { name, description, price, size, stock } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    const { name, description, price, size, stock, image_url } = req.body;
+    let imageUrl = req.file ? `/uploads/${req.file.filename}` : (image_url || null);
 
     const [result] = await pool.query(
       'INSERT INTO products (name, description, price, size, stock, image_url) VALUES (?, ?, ?, ?, ?, ?)',
@@ -72,13 +72,16 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
 
 router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
   try {
-    const { name, description, price, size, stock } = req.body;
+    const { name, description, price, size, stock, image_url } = req.body;
     let query = 'UPDATE products SET name=?, description=?, price=?, size=?, stock=?';
     const params = [name, description, price, size, stock];
 
     if (req.file) {
       query += ', image_url=?';
       params.push(`/uploads/${req.file.filename}`);
+    } else if (image_url !== undefined) {
+      query += ', image_url=?';
+      params.push(image_url || null);
     }
 
     query += ' WHERE id=?';
