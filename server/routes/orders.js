@@ -64,12 +64,10 @@ router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
       [orderId]
     );
 
-    if (source === 'online_payment') {
-      await pool.query(
-        'INSERT INTO payments (order_id, amount, method, status, screenshot_url) VALUES (?, ?, ?, ?, ?)',
-        [orderId, totalAmount, 'upi', 'pending', screenshotUrl]
-      );
-    }
+    await pool.query(
+      'INSERT INTO payments (order_id, amount, method, status, screenshot_url) VALUES (?, ?, ?, ?, ?)',
+      [orderId, totalAmount, source === 'online_payment' ? 'upi' : source, 'pending', screenshotUrl]
+    );
 
     if (customerEmail) {
       sendOrderConfirmation(transformItem(orderRows[0]), itemRows, customerEmail).catch(() => {});
