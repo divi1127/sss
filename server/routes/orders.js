@@ -122,6 +122,56 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/stats/summary', authMiddleware, async (req, res) => {
+  try {
+    const [totalOrders] = await pool.query('SELECT COUNT(*) as count FROM orders');
+    const [pendingVerification] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Payment Verification Pending'");
+    const [revenue] = await pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status IN ('Confirmed','Out for Delivery','Delivered')");
+    const [confirmed] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Confirmed'");
+    const [delivered] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Delivered'");
+    const [todayOrders] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = CURDATE()");
+    const [weekRevenue] = await pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) AND status IN ('Confirmed','Out for Delivery','Delivered')");
+    const [sourceBreakdown] = await pool.query('SELECT order_source, COUNT(*) as count FROM orders GROUP BY order_source');
+    const [paymentMethodStats] = await pool.query("SELECT method, COUNT(*) as count FROM payments GROUP BY method");
+    const [recentOrders] = await pool.query(`
+      SELECT o.id, o.total_amount, o.status, o.order_source, o.created_at,
+             c.name as customer_name
+      FROM orders o JOIN customers c ON o.customer_id = c.id
+      ORDER BY o.created_at DESC LIMIT 5
+    `);
+
+    res.json({
+      totalOrders: totalOrders[0].count,
+      pendingVerification: pendingVerification[0].count,
+      revenue: revenue[0].total,
+      confirmed: confirmed[0].count,
+      delivered: delivered[0].count,
+      todayOrders: todayOrders[0].count,
+      weekRevenue: weekRevenue[0].total,
+      sourceBreakdown,
+      paymentMethodStats,
+      recentOrders,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/my', customerAuth.authMiddleware, async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT o.*, c.name as customer_name, c.phone as customer_phone, c.address as customer_address
+      FROM orders o
+      JOIN customers c ON o.customer_id = c.id
+      WHERE o.user_id = ?
+      ORDER BY o.created_at DESC
+    `, [req.user.id]);
+    res.json(transformArray(rows));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get('/track/:id', async (req, res) => {
   try {
     const [orders] = await pool.query(`
@@ -203,56 +253,6 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
     }
 
     res.json({ message: 'Order status updated', status });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.get('/my', customerAuth.authMiddleware, async (req, res) => {
-  try {
-    const [rows] = await pool.query(`
-      SELECT o.*, c.name as customer_name, c.phone as customer_phone, c.address as customer_address
-      FROM orders o
-      JOIN customers c ON o.customer_id = c.id
-      WHERE o.user_id = ?
-      ORDER BY o.created_at DESC
-    `, [req.user.id]);
-    res.json(transformArray(rows));
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.get('/stats/summary', authMiddleware, async (req, res) => {
-  try {
-    const [totalOrders] = await pool.query('SELECT COUNT(*) as count FROM orders');
-    const [pendingVerification] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Payment Verification Pending'");
-    const [revenue] = await pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status IN ('Confirmed','Out for Delivery','Delivered')");
-    const [confirmed] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Confirmed'");
-    const [delivered] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE status = 'Delivered'");
-    const [todayOrders] = await pool.query("SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = CURDATE()");
-    const [weekRevenue] = await pool.query("SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) AND status IN ('Confirmed','Out for Delivery','Delivered')");
-    const [sourceBreakdown] = await pool.query('SELECT order_source, COUNT(*) as count FROM orders GROUP BY order_source');
-    const [paymentMethodStats] = await pool.query("SELECT method, COUNT(*) as count FROM payments GROUP BY method");
-    const [recentOrders] = await pool.query(`
-      SELECT o.id, o.total_amount, o.status, o.order_source, o.created_at,
-             c.name as customer_name
-      FROM orders o JOIN customers c ON o.customer_id = c.id
-      ORDER BY o.created_at DESC LIMIT 5
-    `);
-
-    res.json({
-      totalOrders: totalOrders[0].count,
-      pendingVerification: pendingVerification[0].count,
-      revenue: revenue[0].total,
-      confirmed: confirmed[0].count,
-      delivered: delivered[0].count,
-      todayOrders: todayOrders[0].count,
-      weekRevenue: weekRevenue[0].total,
-      sourceBreakdown,
-      paymentMethodStats,
-      recentOrders,
-    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

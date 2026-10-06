@@ -67,7 +67,8 @@ export default function TrackOrder() {
     if (!id?.trim()) return;
     setLoading(true); setError(''); setOrder(null);
     try {
-      const res = await api.get(`/orders/track/${id.trim()}`);
+      const cleanId = id.trim().replace(/^#/, '');
+      const res = await api.get(`/orders/track/${cleanId}`);
       setOrder(res.data);
       setReviewName(res.data.customer_name || '');
     } catch (err) {

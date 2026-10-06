@@ -135,18 +135,17 @@ export default function AdminLayout() {
               </div>
             </div>
           ))}
-        </nav>
 
-        {/* Footer */}
-        <div className="p-3 border-t border-white/10">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors w-full px-3 py-2.5 rounded-xl hover:bg-red-500/10 hover:text-red-400"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Logout</span>
-          </button>
-        </div>
+          <div className="mt-8 pt-4 border-t border-white/10">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors w-full px-3 py-2.5 rounded-xl hover:bg-red-500/10 hover:text-red-400"
+            >
+              <LogOut className="w-4.5 h-4.5" />
+              <span className="font-medium">Logout</span>
+            </button>
+          </div>
+        </nav>
       </aside>
 
       {/* Main content */}
