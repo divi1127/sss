@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/db');
-const { authenticateAdmin } = require('../middleware/auth');
+const authMiddleware = require('../middleware/auth');
 
 // Create enquiry
 router.post('/', async (req, res) => {
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
 });
 
 // Admin: Get all enquiries
-router.get('/', authenticateAdmin, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT e.*, p.name as product_name
@@ -34,7 +34,7 @@ router.get('/', authenticateAdmin, async (req, res) => {
 });
 
 // Admin: Update enquiry status
-router.put('/:id', authenticateAdmin, async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   const { status } = req.body;
   try {
     await pool.query('UPDATE enquiries SET status = ? WHERE id = ?', [status, req.params.id]);
@@ -45,7 +45,7 @@ router.put('/:id', authenticateAdmin, async (req, res) => {
 });
 
 // Admin: Delete enquiry
-router.delete('/:id', authenticateAdmin, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     await pool.query('DELETE FROM enquiries WHERE id = ?', [req.params.id]);
     res.json({ message: 'Enquiry deleted' });
