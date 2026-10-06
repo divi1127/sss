@@ -177,6 +177,7 @@ async function sendStatusUpdate(order, customerEmail) {
   const trackUrl = `${CLIENT_URL}/track-order/${order.id}`;
 
   const statusConfig = {
+    'Payment Verified':   { icon: '💸', color: '#10b981', msg: 'Your payment has been successfully verified! We are preparing your order.' },
     'Confirmed':          { icon: '✅', color: '#16a34a', msg: 'Great news! Your order has been confirmed and we are preparing it for dispatch.' },
     'Out for Delivery':   { icon: '🚚', color: '#2563eb', msg: 'Your order is out for delivery! Our delivery partner is on the way.' },
     'Delivered':          { icon: '🎉', color: '#059669', msg: 'Your order has been delivered! We hope you love S CUBE.' },

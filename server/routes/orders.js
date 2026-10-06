@@ -225,7 +225,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.put('/:id/status', authMiddleware, async (req, res) => {
   try {
     const { status, tracking_number, estimated_delivery } = req.body;
-    const validStatuses = ['Payment Verification Pending', 'Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled', 'Payment Failed', 'Pending'];
+    const validStatuses = ['Payment Verification Pending', 'Payment Verified', 'Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled', 'Payment Failed', 'Pending'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
@@ -237,6 +237,13 @@ router.put('/:id/status', authMiddleware, async (req, res) => {
     updateQuery += ' WHERE id = ?';
     updateParams.push(req.params.id);
     await pool.query(updateQuery, updateParams);
+
+    // Sync payment status based on order status
+    if (status === 'Payment Verified') {
+      await pool.query("UPDATE payments SET status = 'verified' WHERE order_id = ?", [req.params.id]);
+    } else if (status === 'Payment Failed') {
+      await pool.query("UPDATE payments SET status = 'failed' WHERE order_id = ?", [req.params.id]);
+    }
 
     const [orders] = await pool.query(`
       SELECT o.*, c.name as customer_name, c.phone as customer_phone, c.email as customer_email

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ShoppingCart, Eye, Search, X, Filter, Download, Truck } from 'lucide-react';
 import api from '../api/axios';
 
-const STATUSES = ['Payment Verification Pending', 'Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled', 'Payment Failed', 'Pending'];
+const STATUSES = ['Payment Verification Pending', 'Payment Verified', 'Confirmed', 'Out for Delivery', 'Delivered', 'Cancelled', 'Payment Failed', 'Pending'];
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -244,6 +244,7 @@ export default function AdminOrders() {
 function StatusBadge({ status }) {
   const colors = {
     'Payment Verification Pending': 'bg-yellow-100 text-yellow-700',
+    'Payment Verified': 'bg-emerald-100 text-emerald-700',
     'Pending': 'bg-yellow-100 text-yellow-700',
     'Confirmed': 'bg-green-100 text-green-700',
     'Out for Delivery': 'bg-blue-100 text-blue-700',
