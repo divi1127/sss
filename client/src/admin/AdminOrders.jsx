@@ -181,7 +181,7 @@ export default function AdminOrders() {
               </table>
             </div>
 
-            <div className="border-t pt-4">
+              <div className="border-t pt-4">
               <strong className="text-sm">Update Status:</strong>
 
               <div className="grid grid-cols-2 gap-2 mt-2 mb-3">
@@ -206,33 +206,32 @@ export default function AdminOrders() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                {STATUSES.map(s => (
-                  <button
-                    key={s}
-                    onClick={() => updateStatus(
-                      detail.id, s,
-                      document.getElementById('trackingInput')?.value,
-                      document.getElementById('deliveryInput')?.value,
-                    )}
-                    disabled={s === detail.status}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      s === detail.status
-                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                        : s === 'Cancelled' || s === 'Payment Failed'
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                        : s === 'Confirmed'
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                        : s === 'Out for Delivery'
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                        : s === 'Delivered'
-                        ? 'bg-teal-100 text-teal-700 hover:bg-teal-200'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <div className="flex-1 w-full">
+                  <select
+                    id="statusSelect"
+                    defaultValue={detail.status}
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-400 bg-white"
                   >
-                    {s}
-                  </button>
-                ))}
+                    {STATUSES.map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  onClick={() => {
+                    const selectedStatus = document.getElementById('statusSelect').value;
+                    const trackingNumber = document.getElementById('trackingInput').value;
+                    const deliveryDate = document.getElementById('deliveryInput').value;
+                    if (selectedStatus === detail.status && trackingNumber === (detail.tracking_number || '') && deliveryDate === (detail.estimated_delivery ? detail.estimated_delivery.substring(0,10) : '')) {
+                      return; // Nothing changed
+                    }
+                    updateStatus(detail.id, selectedStatus, trackingNumber, deliveryDate);
+                  }}
+                  className="w-full sm:w-auto bg-brand-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm"
+                >
+                  Save Changes
+                </button>
               </div>
             </div>
           </div>

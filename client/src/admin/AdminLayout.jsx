@@ -46,6 +46,7 @@ export default function AdminLayout() {
         { to: '/admin/payments', icon: IndianRupee, label: 'Payments' },
         { to: '/admin/customers', icon: Users, label: 'Customers' },
         { to: '/admin/reviews', icon: Star, label: 'Reviews', badge: reviewPending },
+        { to: '/admin/enquiries', icon: Bell, label: 'Enquiries' },
       ],
     },
     {
@@ -79,7 +80,7 @@ export default function AdminLayout() {
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 flex flex-col flex-shrink-0 transition-transform duration-300
+      <aside className={`fixed lg:sticky top-0 inset-y-0 left-0 z-50 w-64 h-screen flex flex-col flex-shrink-0 transition-transform duration-300
         bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >

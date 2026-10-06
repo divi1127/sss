@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FlaskConical, SearchX, Star, CheckCircle, ShieldCheck, Sparkles, MessageSquare, ThumbsUp, Send, X, Plus } from 'lucide-react';
+import { FlaskConical, SearchX, Star, CheckCircle, ShieldCheck, Sparkles, MessageSquare, ThumbsUp, Send, X, Plus, MessageCircle } from 'lucide-react';
 import api from '../api/axios';
 import { useCart } from '../context/CartContext';
 
@@ -13,6 +13,10 @@ export default function ProductDetail() {
   const [added, setAdded] = useState(false);
   const [activeTab, setActiveTab] = useState('description'); // 'description' | 'reviews' | 'usage'
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [submittingEnquiry, setSubmittingEnquiry] = useState(false);
+  const [enquirySubmitted, setEnquirySubmitted] = useState(false);
+  const [enquiryForm, setEnquiryForm] = useState({ name: '', phone: '', message: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [reviewForm, setReviewForm] = useState({
@@ -54,6 +58,34 @@ export default function ProductDetail() {
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleWhatsAppEnquiry = () => {
+    const text = `Hi, I want to enquire about ${product.name} (Price: ₹${product.price}).`;
+    window.open(`https://wa.me/918825733129?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const handleSubmitEnquiry = async (e) => {
+    e.preventDefault();
+    setSubmittingEnquiry(true);
+    try {
+      await api.post('/enquiries', {
+        product_id: parseInt(id),
+        name: enquiryForm.name,
+        phone: enquiryForm.phone,
+        message: enquiryForm.message,
+      });
+      setEnquirySubmitted(true);
+      setTimeout(() => {
+        setEnquirySubmitted(false);
+        setShowEnquiryModal(false);
+        setEnquiryForm({ name: '', phone: '', message: '' });
+      }, 2500);
+    } catch (err) {
+      alert('Failed to submit enquiry');
+    } finally {
+      setSubmittingEnquiry(false);
+    }
   };
 
   const handleSubmitReview = async (e) => {
@@ -252,6 +284,22 @@ export default function ProductDetail() {
                 <>Add to Cart — ₹{(parseFloat(product.price) * qty).toFixed(2)}</>
               )}
             </button>
+
+            {/* Enquiry Buttons */}
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              <button
+                onClick={handleWhatsAppEnquiry}
+                className="w-full bg-[#25D366] text-white hover:bg-[#128C7E] font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+              >
+                <MessageCircle className="w-5 h-5" /> WhatsApp Enquiry
+              </button>
+              <button
+                onClick={() => setShowEnquiryModal(true)}
+                className="w-full bg-white text-gray-800 border border-gray-300 hover:bg-gray-50 font-bold py-3 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-5 h-5 text-gray-500" /> Send Enquiry
+              </button>
+            </div>
 
             {/* Trust Badges */}
             <div className="grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-gray-200 text-center">
@@ -553,6 +601,78 @@ export default function ProductDetail() {
                   >
                     <Send className="w-4 h-4" />
                     {submittingReview ? 'Submitting...' : 'Submit Review'}
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Enquiry Submission Modal */}
+      {showEnquiryModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative animate-scale-in">
+            <button
+              onClick={() => setShowEnquiryModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {enquirySubmitted ? (
+              <div className="text-center py-8">
+                <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-3 animate-bounce" />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Enquiry Sent!</h3>
+                <p className="text-sm text-gray-600">We've received your enquiry and our team will get back to you shortly.</p>
+              </div>
+            ) : (
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">Product Enquiry</h3>
+                <p className="text-xs text-gray-500 mb-5">Have a question about {product.name}?</p>
+
+                <form onSubmit={handleSubmitEnquiry} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Your Name *</label>
+                    <input
+                      required
+                      placeholder="e.g. Rahul K."
+                      value={enquiryForm.name}
+                      onChange={(e) => setEnquiryForm({ ...enquiryForm, name: e.target.value })}
+                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Phone Number *</label>
+                    <input
+                      required
+                      type="tel"
+                      placeholder="e.g. 9876543210"
+                      value={enquiryForm.phone}
+                      onChange={(e) => setEnquiryForm({ ...enquiryForm, phone: e.target.value })}
+                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Your Message (Optional)</label>
+                    <textarea
+                      rows="3"
+                      placeholder="What would you like to know about this product?"
+                      value={enquiryForm.message}
+                      onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
+                      className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submittingEnquiry}
+                    className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <Send className="w-4 h-4" />
+                    {submittingEnquiry ? 'Sending...' : 'Send Enquiry'}
                   </button>
                 </form>
               </div>

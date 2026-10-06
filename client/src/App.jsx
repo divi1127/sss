@@ -33,6 +33,7 @@ import AdminAnalytics from './admin/AdminAnalytics';
 import AdminSettings from './admin/AdminSettings';
 import AdminNotifications from './admin/AdminNotifications';
 import AdminReviews from './admin/AdminReviews';
+import AdminEnquiries from './admin/AdminEnquiries';
 import AdminRoute from './components/AdminRoute';
 
 function CustomerLayout({ children }) {
@@ -83,6 +84,7 @@ export default function App() {
                   <Route path="/admin/settings" element={<AdminSettings />} />
                   <Route path="/admin/notifications" element={<AdminNotifications />} />
                   <Route path="/admin/reviews" element={<AdminReviews />} />
+                  <Route path="/admin/enquiries" element={<AdminEnquiries />} />
                 </Route>
               </Route>
             </Routes>

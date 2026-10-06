@@ -135,7 +135,18 @@ async function initDB() {
   // Add tracking columns to orders if not exist
   try { await conn.query('ALTER TABLE orders ADD COLUMN tracking_number VARCHAR(255) NULL'); } catch (e) {}
   try { await conn.query('ALTER TABLE orders ADD COLUMN estimated_delivery DATE NULL'); } catch (e) {}
-  try { await conn.query('ALTER TABLE products MODIFY COLUMN image_url LONGTEXT'); } catch (e) {}
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS enquiries (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      product_id INT,
+      name VARCHAR(255) NOT NULL,
+      phone VARCHAR(20) NOT NULL,
+      message TEXT,
+      status ENUM('Pending', 'Responded', 'Closed') DEFAULT 'Pending',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
+    )
+  `);
 
   conn.release();
   console.log('Database initialized successfully');

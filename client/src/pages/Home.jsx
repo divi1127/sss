@@ -50,9 +50,10 @@ export default function Home() {
           loop
           muted
           playsInline
+          crossOrigin="anonymous"
           className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          <source src="/Kitchen_liquid.mp4" type="video/mp4" />
+          <source src="/Kitchen_liquid.mp4?v=1" type="video/mp4" />
         </video>
 
         {/* Soft natural fade on left side for text readability (no hard card box) */}
